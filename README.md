@@ -32,7 +32,8 @@ review its terms. The tools accept one exact x64 input hash.
    and redistribution. This project currently has **no open-source license**.
    A tooling repository does not resolve rights to modify or redistribute
    Roland software or vendor-derived material.
-2. Follow [local build instructions](docs/BUILD.md).
+2. Follow the [step-by-step download, patch and test tutorial](docs/TUTORIAL.md).
+   The shorter [build reference](docs/BUILD.md) is also available.
 3. Review [manual testing](docs/TESTING.md) before considering a hardware load.
 4. See [CONTRIBUTING.md](CONTRIBUTING.md) for reproducible reports.
 

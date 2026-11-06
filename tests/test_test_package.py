@@ -38,6 +38,30 @@ class PackageTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             package.plan_package(candidate=b'changed')
 
+    def test_reviewed_legacy_inf_builds_same_payload_without_editing_source(self):
+        choices = [package.SOURCE / 'RDIF1064.INF.old', package.SOURCE / 'RDIF1064.INF']
+        legacy = next((p for p in choices if p.exists() and package.sha(p.read_bytes()) == package.LEGACY_INF_HASH), None)
+        if legacy is None:
+            self.skipTest('Reviewed legacy INF fixture is not present')
+        before = legacy.read_bytes()
+        output, diff = package.lab_inf(before)
+        self.assertEqual(package.sha(output), 'a53a8e56fb78de334f506ad53c6875611fe00cc0eca62844d5501a045314bef8')
+        marker = '[RDID0064Install.NTamd64]'
+        self.assertEqual(output.decode('utf-16').split(marker, 1)[1], before.decode('utf-16').split(marker, 1)[1])
+        self.assertIn('NTamd64.6.2', diff)
+        scratch = package.ROOT / 'build/package-tests'
+        scratch.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=scratch) as directory:
+            folder = Path(directory)
+            for name in package.HASHES:
+                (folder / name).write_bytes(before if name == 'RDIF1064.INF' else (package.SOURCE / name).read_bytes())
+            planned = package.plan_package(source=folder)
+            self.assertEqual(planned['driver/RDIF1064.INF'], output)
+            evidence = json.loads(planned['evidence/package.json'])
+            self.assertEqual(evidence['source_sha256']['RDIF1064.INF'], package.LEGACY_INF_HASH)
+            self.assertEqual((folder / 'RDIF1064.INF').read_bytes(), before)
+        self.assertEqual(legacy.read_bytes(), before)
+
     def test_output_guard_and_idempotence(self):
         scratch = package.ROOT / 'build/package-tests'
         scratch.mkdir(parents=True, exist_ok=True)

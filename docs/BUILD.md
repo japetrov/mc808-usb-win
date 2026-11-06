@@ -53,12 +53,14 @@ On GitHub Actions only source/publication checks run, without Roland inputs.
 
 Place your separately obtained RDCI1064.DLL, RDCP1064.CPL, RDDP1064.DAT and
 reviewed RDIF1064.INF beside the original SYS. The preparer accepts only the exact
-fingerprints listed in tools/prepare_test_package.py. The current INF pin is the
-research checkout's previously modified INF, not a promise that every original
-download has identical bytes. If your INF differs, package preparation stops:
-it needs explicit review/adaptation before this optional route can be used.
+fingerprints listed in tools/prepare_test_package.py. Both the reviewed legacy
+INF layout and earlier modified research layout are accepted; both produce the
+same lab INF without altering the source. Unknown revisions stop for review.
+The standalone `tools/patch_inf.py` writes a separate copy plus diff/hash evidence
+under build/inf; package preparation uses the same transformation automatically.
 Do not fake a fingerprint or modify the original to satisfy the check.
-The SYS-only reconstruction above does not depend on the INF.
+The SYS-only reconstruction above does not depend on the INF. See TUTORIAL.md
+for the complete manual Windows testing sequence.
 
 ```powershell
 .venv-analysis\Scripts\python.exe tools\prepare_test_package.py
