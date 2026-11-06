@@ -1,0 +1,10 @@
+{
+  "tool": "UASM",
+  "version": "2.57",
+  "release_tag": "v2.57r",
+  "release_url": "https://github.com/Terraspace/UASM/releases/tag/v2.57r",
+  "archive_url": "https://github.com/Terraspace/UASM/releases/download/v2.57r/uasm257_x64.zip",
+  "archive_sha256": "a083bf0f7bd45dead8a90f1fe1a25a83d6942d50c6d3def6e442188f15fce991",
+  "executable_sha256": "eea725407610dd690fd91e64227c5eb1ca66f34d32d86b6cb3c8f5ff22b3f55b",
+  "digest_note": "Locally observed fingerprints of the official HTTPS release download; not publisher-signed attestations."
+}

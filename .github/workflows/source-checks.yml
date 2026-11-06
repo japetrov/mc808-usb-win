@@ -1,0 +1,21 @@
+name: Source checks
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  source-only:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Compile Python sources
+        run: python -m compileall -q tools tests
+      - name: Test publication guards without vendor input
+        run: python -m unittest discover -s tests -p test_publication.py -v
+      - name: Audit curated repository and history
+        run: python tools/audit_repository.py --history
